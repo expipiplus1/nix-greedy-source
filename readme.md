@@ -9,16 +9,18 @@ To reproduce:
 
     ```diff
     diff --git a/pkgs/development/haskell-modules/make-package-set.nix b/pkgs/development/haskell-modules/make-package-set.nix
-    index 9ba25e09db9..1e7c7d6dfff 100644
+    index 45fe475b733..38265a2e8af 100644
     --- a/pkgs/development/haskell-modules/make-package-set.nix
     +++ b/pkgs/development/haskell-modules/make-package-set.nix
-    @@ -298,8 +298,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
-                 # If `packages = [ a b ]` and `a` depends on `b`, don't build `b`,
-                 # because cabal will end up ignoring that built version, assuming
-                 # new-style commands.
-    -            combinedPackages = pkgs.lib.filter
-    -              (input: pkgs.lib.all (p: input.outPath or null != p.outPath) selected);
-    +            combinedPackages = x: x;
+    @@ -354,7 +354,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
+             #
+             #   isNotSelected lens [ frontend backend common ]
+             #   => true
+    -        isNotSelected = input: pkgs.lib.all (p: input.outPath or null != p.outPath) selected;
+    +        isNotSelected = input: true;
+
+             # A function that takes a list of list of derivations, filters out all
+             # the `selected` packages from each list, and concats the results.
     ```
 
 - Try to enter a nix shell (`nix-shell`)
